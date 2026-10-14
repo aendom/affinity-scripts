@@ -47,7 +47,7 @@ function layerName(node) {
 }
 
 function docBaseName(doc) {
-    const t = (doc.title || 'documento').replace(/\.[^.]+$/, '');
+    const t = (doc.title || 'document').replace(/\.[^.]+$/, '');
     return safeFileName(t);
 }
 
@@ -55,7 +55,7 @@ function docBaseName(doc) {
 async function run() {
     const doc = Document.current;
     if (!doc) {
-        app.alert('Abre un documento antes de correr el script.', 'Exportar Layers');
+        app.alert('Open a document before running this script.', 'Export Layers');
         return;
     }
 
@@ -63,12 +63,12 @@ async function run() {
     // Diagnostics only: we don't stop here; any real error surfaces during export.
     let roots = [];
     try { roots = Environment.fileSystemRoots || []; } catch (_) {}
-    try { console.log('Permisos: ' + JSON.stringify(Environment.permissions)); } catch (_) {}
-    console.log('Carpetas permitidas: ' + (roots.join(' | ') || '(ninguna)'));
+    try { console.log('Permissions: ' + JSON.stringify(Environment.permissions)); } catch (_) {}
+    console.log('Allowed folders: ' + (roots.join(' | ') || '(none)'));
 
     const layers = doc.layers.toArray();
     if (layers.length === 0) {
-        app.alert('El documento no tiene layers.', 'Exportar Layers');
+        app.alert('The document has no layers.', 'Export Layers');
         return;
     }
 
@@ -76,7 +76,7 @@ async function run() {
     const presets = FileExportOptions.allPresetNames
         .filter(n => /jpe?g|png/i.test(n));
     if (presets.length === 0) {
-        app.alert('No encontré presets JPEG o PNG de exportación.', 'Exportar Layers');
+        app.alert('No JPEG or PNG export presets were found.', 'Export Layers');
         return;
     }
     let defaultPreset = presets.findIndex(n => /jpe?g.*best/i.test(n));
@@ -92,23 +92,23 @@ async function run() {
     });
 
     // ---------- dialog ----------
-    const dlg = Dialog.create('Exportar Layers');
+    const dlg = Dialog.create('Export Layers');
     dlg.initialWidth = 480;
     const col = dlg.addColumn();
 
-    const gFmt = col.addGroup('Formato');
+    const gFmt = col.addGroup('Format');
     const cFormat = gFmt.addComboBox('Preset', presets, defaultPreset);
 
-    const gDest = col.addGroup('Destino');
-    const tFolder = gDest.addTextBox('Carpeta', defaultFolder);
-    const bPick = gDest.addButton('Elegir carpeta…');
-    gDest.addStaticText('', 'Tip: en "Elegir carpeta…" selecciona cualquier archivo dentro de la carpeta deseada. ' +
-                            'También puedes escribir una ruta nueva y se intentará crear.');
+    const gDest = col.addGroup('Destination');
+    const tFolder = gDest.addTextBox('Folder', defaultFolder);
+    const bPick = gDest.addButton('Choose folder…');
+    gDest.addStaticText('', 'Tip: in "Choose folder…" select any file inside the target folder. ' +
+                            'You can also type a new path and the script will try to create it.');
 
-    const gOpt = col.addGroup('Opciones');
-    const cArea = gOpt.addButtonSet('Área', ['Lienzo completo', 'Solo el layer'], 0);
-    const sHidden = gOpt.addSwitch('Incluir layers ocultos', true);
-    const sPrefix = gOpt.addSwitch('Numerar archivos (01_, 02_ …) en orden del panel', false);
+    const gOpt = col.addGroup('Options');
+    const cArea = gOpt.addButtonSet('Area', ['Full canvas', 'Layer only'], 0);
+    const sHidden = gOpt.addSwitch('Include hidden layers', true);
+    const sPrefix = gOpt.addSwitch('Number files (01_, 02_ …) in panel order', false);
 
     bPick.onClickHandler = () => {
         try {
@@ -116,7 +116,7 @@ async function run() {
             const p = typeof picked === 'string' ? picked : (picked?.path ?? '');
             if (p) tFolder.text = dirName(p);
         } catch (e) {
-            console.log('chooseFile falló: ' + e);
+            console.log('chooseFile failed: ' + e);
         }
     };
 
@@ -132,15 +132,15 @@ async function run() {
 
     let folder = (tFolder.text || '').trim().replace(/^"|"$/g, '');
     if (!folder) {
-        app.alert('Elige o escribe una carpeta de destino.', 'Exportar Layers');
+        app.alert('Choose or type a destination folder.', 'Export Layers');
         return;
     }
 
     if (!isAllowed(folder)) {
-        app.alert('Affinity no deja que los scripts escriban en:\n' + folder +
-                  '\n\nCarpetas permitidas:\n' + roots.join('\n') +
-                  '\n\nAgrega la carpeta en Settings > Scripting > File System access > Add, ' +
-                  'o elige una carpeta dentro de las permitidas.', 'Exportar Layers');
+        app.alert('Affinity does not allow scripts to write to:\n' + folder +
+                  '\n\nAllowed folders:\n' + roots.join('\n') +
+                  '\n\nAdd the folder in Settings > Scripting > File System access > Add, ' +
+                  'or choose a folder inside one of the allowed ones.', 'Export Layers');
         return;
     }
 
@@ -196,16 +196,16 @@ async function run() {
     }
 
     // ---------- summary ----------
-    let msg = 'Exportados ' + ok.length + ' archivo(s) como "' + presetName + '" en:\n' + folder;
-    if (failed.length) msg += '\n\nFallaron ' + failed.length + ':\n' + failed.join('\n');
+    let msg = 'Exported ' + ok.length + ' file(s) as "' + presetName + '" to:\n' + folder;
+    if (failed.length) msg += '\n\nFailed ' + failed.length + ':\n' + failed.join('\n');
     if (failed.length && !ok.length)
-        msg += '\n\nRevisa que la carpeta exista (créala en el Explorador si hace falta) ' +
-               'y que esté dentro de las carpetas permitidas en Settings > Scripting.';
+        msg += '\n\nCheck that the folder exists (create it in File Explorer if needed) ' +
+               'and that it is inside an allowed folder in Settings > Scripting.';
     console.log(msg);
-    app.alert(msg, 'Exportar Layers');
+    app.alert(msg, 'Export Layers');
 }
 
 run().catch(e => {
     console.log(e?.stack || String(e));
-    app.alert('Error: ' + e, 'Exportar Layers');
+    app.alert('Error: ' + e, 'Export Layers');
 });

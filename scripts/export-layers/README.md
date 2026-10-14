@@ -24,14 +24,12 @@ Exports each layer of the document as a separate JPG or PNG file, named after it
 | Option | Description |
 | --- | --- |
 | Preset | Any JPEG or PNG export preset installed in Affinity. Defaults to *JPEG (Best quality)*. |
-| Folder | Destination folder. Defaults to the first allowed folder. Type a path or use **Elegir carpeta…** (Choose folder) (pick any file inside the target folder). |
+| Folder | Destination folder. Defaults to the first allowed folder. Type a path or use **Choose folder…** (pick any file inside the target folder). |
 | Area | *Full canvas*: every file has the document's size. *Layer only*: cropped to the layer's bounds. |
 | Include hidden layers | Also exports layers that are currently hidden. |
 | Number files | Prefixes files with `01_`, `02_`… following the Layers panel order. |
 
 When it finishes, the script restores every layer's original visibility and shows a summary.
-
-> The dialog labels are currently in Spanish.
 
 ## Behavior and limitations
 
@@ -39,7 +37,7 @@ When it finishes, the script restores every layer's original visibility and show
 - Characters that Windows does not allow in file names are replaced with `_`. Duplicate names get a `_2`, `_3`… suffix.
 - The script hides and shows layers while exporting, which adds steps to the **History** panel. The document itself is not changed.
 - Creating a new folder from the script may not work in every environment. If the export fails, create the folder first in your file manager.
-- There is no native folder picker in the scripting SDK, so **Elegir carpeta…** uses the file picker and takes the selected file's folder.
+- There is no native folder picker in the scripting SDK, so **Choose folder…** uses the file picker and takes the selected file's folder.
 
 ## Troubleshooting
 
