@@ -34,3 +34,7 @@ scripts/
 2. Add `<script-name>.js` with a header comment describing what it does and its requirements.
 3. Add a `README.md` following the same sections as the existing scripts.
 4. Add a row to the table above.
+
+## License
+
+[MIT](LICENSE)
