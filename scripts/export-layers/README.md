@@ -2,6 +2,8 @@
 
 Exports each layer of the document as a separate JPG or PNG file, named after its name in the Layers panel. You can choose the export preset, the destination folder, whether to export at full canvas size or cropped to the layer, and whether to include hidden layers.
 
+![Export Layers dialog](images/export-dialog.png)
+
 ## Requirements
 
 - **Affinity by Canva** with scripting support (Script Editor and Scripts Library).
@@ -17,7 +19,10 @@ Exports each layer of the document as a separate JPG or PNG file, named after it
 
 ## Usage
 
-1. Open the document whose layers you want to export.
+1. Open the document whose layers you want to export. Each top-level layer becomes one file, using its name from the Layers panel:
+
+   ![A document with six layers named 01 to 06 in the Layers panel](images/layers-panel.jpg)
+
 2. Run the script from the Scripts Library (or click **Run** in the Script Editor).
 3. Set the options in the dialog and click **OK**.
 
