@@ -17,6 +17,8 @@ Exports each layer of the document as a separate JPG or PNG file, named after it
 2. Paste the contents of [`export-layers.js`](export-layers.js).
 3. Click **Save As…** to add it to the **Scripts Library**.
 
+![The script open in the Script Editor (left), with its log below the Run button, and listed in the Scripts Library (right)](images/script-editor.jpg)
+
 ## Usage
 
 1. Open the document whose layers you want to export. Each top-level layer becomes one file, using its name from the Layers panel:
@@ -46,7 +48,7 @@ When it finishes, the script restores every layer's original visibility and show
 
 ## Troubleshooting
 
-Open **Running Scripts > View Log**. The script logs its permissions and allowed folders at startup.
+Check the log, shown below the **Run** button in the Script Editor (or in **Running Scripts > View Log**). The script logs its permissions and allowed folders at startup, and a summary when it finishes.
 
 | Error | Cause / fix |
 | --- | --- |
